@@ -1,0 +1,10 @@
+Number of Nodes: 4
+Nodes: [a, b, c, d]
+Number of Edges: 4
+
+digraph {
+"a" -> "b"
+"b" -> "c"
+"c" -> "d"
+"d" -> "a"
+}
