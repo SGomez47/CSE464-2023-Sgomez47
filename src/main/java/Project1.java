@@ -1,13 +1,10 @@
-import guru.nidi.graphviz.attribute.*;
 import guru.nidi.graphviz.model.*;
 import guru.nidi.graphviz.parse.*;
 import guru.nidi.graphviz.engine.*;
 
 import java.io.*;
-import java.util.*;
 
 import static guru.nidi.graphviz.model.Factory.*;
-import guru.nidi.graphviz.model.MutableGraph.*;
 
 public class Project1 {
     private MutableGraph graph;
@@ -27,6 +24,16 @@ public class Project1 {
     public void addNode(String label) {
         MutableNode graphNode = mutNode(label);
         graph.add(graphNode);
+    }
+
+    public void addNodes(String[] label){
+        for (String nodeLabel : label) {
+            addNode(nodeLabel);
+        }
+    }
+
+    public void addEdge(String srcLabel, String dstLabel){
+        graph.add(Factory.mutNode(srcLabel).addLink(dstLabel));
     }
 
     public String toString(){

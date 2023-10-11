@@ -31,7 +31,24 @@ public class Project1Test {
     public void testAddNode() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
         test.addNode("Node1");
+        test.addNode("Node1");      //Doesn't add duplicate
         System.out.println(test.toString());
     }
 
+    @Test
+    public void testAddNodes() throws IOException{
+        test.parseGraph("src/main/resources/input.dot");
+        String[] label = {"Node1", "Node2", "Node3"};
+        test.addNodes(label);
+        System.out.println(test.toString());
+    }
+
+    @Test
+    public void testAddEdge() throws IOException{
+        test.parseGraph("src/main/resources/input.dot");
+        test.addNode("Node1");
+        test.addNode("Node2");
+        test.addEdge("Node1", "Node2");
+        System.out.println(test.toString());
+    }
 }
