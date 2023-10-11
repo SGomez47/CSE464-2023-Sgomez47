@@ -16,18 +16,26 @@ public class Project1Test {
         test = new Project1();
     }
 
+    //Test to parse the graph
+    @Test
+    public void testParseGraph() throws IOException{
+        test.parseGraph("src/main/resources/input.dot");
+    }
+
+    //Test to print out the graph into the terminal and outputs the graph into a txt file located in resource folder
     @Test
     public void testOutputGraph() throws IOException{
         test.parseGraph("src/main/resources/input.dot");        //Feature 1 parseGraph
-
+        System.out.println(test.toString());
         test.outputGraph("src/main/resources/output.txt");
         File outputFile = new File("src/main/resources/output.txt");
     }
 
+    //addNode is called and outputs the file in a txt file in resource folder
+    //compares the expected and output
     @Test
     public void testAddNode() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
-        test.addNode("Node1");
         test.addNode("Node1");
         test.addNode("Node1"); //Doesn't add duplicate node
         test.addNode("Node2");
@@ -37,6 +45,8 @@ public class Project1Test {
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //addNodes is called and outputs the file in a txt file in resource folder
+    //compares the expected and output
     @Test
     public void testAddNodes() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
@@ -48,6 +58,8 @@ public class Project1Test {
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //addEdge is called and outputs the file in a txt file in resource folder
+    //compares the expected and output
     @Test
     public void testAddEdge() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
@@ -59,12 +71,18 @@ public class Project1Test {
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //outputDotGraph is called and outputs the file in a dot file in resource folder
+    //compares the expected and output
     @Test
     public void testOutputDotGraph() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
         test.outputDotGraph("src/main/resources/outputDotGraph.dot");
+        String output = Files.readString(Paths.get("src/main/resources/input.dot"));
+        String expected = Files.readString(Paths.get("src/main/resources/outputDotGraph.dot"));
+        Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //outputGraphics is called and outputs the file in a png file in resource folder
     @Test
     public void testOutputGraphics() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
