@@ -1,3 +1,5 @@
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.model.MutableNode;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,6 +71,36 @@ public class Project1Test {
         String output = Files.readString(Paths.get("src/main/resources/addEdge.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/expectedEdges.txt"));
         Assert.assertEquals(expected.trim(), output.trim());
+    }
+
+    @Test
+    public void testRemoveNode() throws IOException {
+        test.parseGraph("src/main/resources/input.dot");
+        test.addNode("Node1");
+        //test.addNode("Node2");
+        test.addEdge("Node1", "Node2");
+        MutableGraph newGraph = test.removeNode("Node1");
+        test.outputNewGraph("src/main/resources/removeNode.txt", newGraph);
+    }
+
+    @Test
+    public void testRemoveNodes() throws IOException{
+        test.parseGraph("src/main/resources/input.dot");
+        String[] label = {"Node1", "Node2", "Node3"};
+        test.addNodes(label);
+        test.addEdge("Node1", "Node2");
+        String[] removeLabels = {"Node1", "Node2"};
+        MutableGraph newGraph = test.removeNodes(removeLabels);
+        test.outputNewGraph("src/main/resources/removeNodes.txt", newGraph);
+    }
+
+    @Test
+    public void testRemoveEdge() throws IOException{
+        test.parseGraph("src/main/resources/input.dot");
+        test.addEdge("Node1", "Node2");
+        test.addEdge("a", "Node3");
+        MutableGraph newGraph = test.removeEdges("Node1", "Node2");
+        test.outputNewGraph("src/main/resources/removeEdge.txt", newGraph);
     }
 
     //outputDotGraph is called and outputs the file in a dot file in resource folder
