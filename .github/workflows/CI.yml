@@ -13,13 +13,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up JDK
-      uses: actions/setup-java@v1
+    - name: Set up Java
+      uses: actions/setup-java@v2
       with:
-        java-version: 11  # You can specify the Java version you need
+        java-version: '11'
 
     - name: Build with Maven
       run: mvn clean install
 
-    - name: Run Tests
+    - name: Run tests
       run: mvn test
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: target/surefire-reports/
+
+    - name: Upload compiled JAR
+      uses: actions/upload-artifact@v2
+      with:
+        name: compiled-jar
+        path: target/your-project-name.jar
