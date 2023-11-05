@@ -8,10 +8,12 @@
 
 name: Java CI with Maven
 
+run-name: Building and Testing
+
 on: [push]
 
 jobs:
-  build:
+  Instal-JDK:
 
     runs-on: ubuntu-latest
 
