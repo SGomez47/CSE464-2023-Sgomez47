@@ -1,10 +1,9 @@
-Number of Nodes: 6
-Nodes: [Node2, Node3, a, b, c, d]
+Number of Nodes: 5
+Nodes: [Node3, a, b, c, d]
 Number of Edges: 4
 
 digraph {
 "Node3"
-"Node2"
 "c" -> "d"
 "d" -> "a"
 "a" -> "b"

@@ -3,9 +3,7 @@ import guru.nidi.graphviz.parse.*;
 import guru.nidi.graphviz.engine.*;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static guru.nidi.graphviz.model.Factory.*;
 
@@ -98,47 +96,76 @@ public class Project1 {
         fileOutput.close();
     }
 
-    public MutableGraph removeNode(String label) {
-        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
-        graph.nodes().forEach(node -> {
-            if (!node.name().toString().equals(label)) {
-                newGraph.add(node);
+    public void removeNode(String label) {
+        MutableGraph newGraph = mutGraph().setDirected(true);
+        boolean exist = false;
+        for(MutableNode node: graph.nodes()) {
+            if (node.name().toString().equals(label)) {
+                exist = true;
             }
-        });
+        }
+        if(exist) {
+            graph.nodes().forEach(node -> {
+                if (!node.name().toString().equals(label)) {
+                    newGraph.add(node);
+                }
+            });
+            graph = newGraph;
 
-        return newGraph;
-        // Remove all edges connected to the removed node
+        }else{
+            System.out.print("Node " + label + " does not exist in graph");
+        }
     }
-
-    public MutableGraph removeNodes(String[] labels){
+    public void removeNodes(String[] labels){
         Set<String> nodesToDelete = new HashSet<>(Arrays.asList(labels));
-        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
+        MutableGraph newGraph = mutGraph().setDirected(true);
 
         graph.nodes().forEach(node -> {
             if (!nodesToDelete.contains(node.name().toString())) {
                 newGraph.add(node);
             }
         });
-        return newGraph;
+
+
+        graph = newGraph;
     }
 
-    public MutableGraph removeEdges(String srcLabel, String dstLabel){
+    public void removeEdges(String srcLabel, String dstLabel){
         Set<String> sourceAndTarget = new HashSet<>();
         sourceAndTarget.add(srcLabel + dstLabel);
-        sourceAndTarget.add(dstLabel + srcLabel);
-
-        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
-
-        graph.edges().forEach(edge -> {
-            String source = edge.from().name().toString();
-            String target = edge.to().name().toString();
-            if (!(sourceAndTarget.contains(source + target)) && !(sourceAndTarget.contains(target + source))) {
-                newGraph.add(mutNode(source).addLink(target)); // Add the edges you want to keep
+        boolean exist = false;
+        //sourceAndTarget.add(dstLabel + srcLabel);
+        for(Link link: graph.edges()){
+            if(link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)){
+                exist = true;
             }
-        });
+        }
+        MutableGraph newGraph = mutGraph().setDirected(true);
+        if(exist) {
+            graph.edges().forEach(edge -> {
+                String source = edge.from().name().toString();
+                String target = edge.to().name().toString();
+                //&& !(sourceAndTarget.contains(target + source))
+                if (!(sourceAndTarget.contains(source + target))) {
+                    newGraph.add(mutNode(source).addLink(target)); // Add the edges you want to keep
+                }
+            });
+
+            graph = newGraph;
+        }else{
+            System.out.print("Edge from " + srcLabel + " to " + dstLabel + " does not exist");
+        }
+    }
+
+    public void deleteDup(MutableGraph tempGraph) throws IOException{
+        String[] nodes = new String[graph.nodes().size()];
+        int i = 0;
+        for(MutableNode outputNode : graph.nodes()) {
+            nodes[i] = outputNode.name().toString();
+            i++;
+        }
 
 
-        return newGraph;
     }
     //------------------------------------------------
     //Feature 4
@@ -152,6 +179,5 @@ public class Project1 {
             Graphviz.fromGraph(graph).width(200).render(Format.PNG).toFile(new File(path));
         }
     }
-
 
 }

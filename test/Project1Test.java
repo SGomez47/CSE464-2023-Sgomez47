@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
+import java.util.*;
 
 public class Project1Test {
     private Project1 test;
@@ -73,16 +73,23 @@ public class Project1Test {
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //removeNode is called removing a node from the list and removing the edge connected to it
+    //compares expected to output
     @Test
     public void testRemoveNode() throws IOException {
         test.parseGraph("src/main/resources/input.dot");
-        test.addNode("Node1");
-        //test.addNode("Node2");
+        test.addNode("Node3");
         test.addEdge("Node1", "Node2");
-        MutableGraph newGraph = test.removeNode("Node1");
-        test.outputNewGraph("src/main/resources/removeNode.txt", newGraph);
+        test.removeNode("Node1");
+        //System.out.print(test.toString());
+        test.outputGraph("src/main/resources/removeNode.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeNode.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveNode.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //removeNodes, removes a list of nodes as well as the edges corresponding to them
+    //compares expected to output
     @Test
     public void testRemoveNodes() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
@@ -90,17 +97,27 @@ public class Project1Test {
         test.addNodes(label);
         test.addEdge("Node1", "Node2");
         String[] removeLabels = {"Node1", "Node2"};
-        MutableGraph newGraph = test.removeNodes(removeLabels);
-        test.outputNewGraph("src/main/resources/removeNodes.txt", newGraph);
+        test.removeNodes(removeLabels);
+        //System.out.print(test.toString());
+        test.outputGraph("src/main/resources/removeNodes.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeNodes.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveNodes.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    //removeEdge removes the edge depending on the source and destination node that is input
+    //will not remove the nodes only the edge
+    //compares expected to output
     @Test
     public void testRemoveEdge() throws IOException{
         test.parseGraph("src/main/resources/input.dot");
         test.addEdge("Node1", "Node2");
-        test.addEdge("a", "Node3");
-        MutableGraph newGraph = test.removeEdges("Node1", "Node2");
-        test.outputNewGraph("src/main/resources/removeEdge.txt", newGraph);
+        test.addEdge("Node2", "Node1");
+        test.removeEdges("Node1", "Node2");
+        test.outputGraph("src/main/resources/removeEdge.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeEdge.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveEdge.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
     }
 
     //outputDotGraph is called and outputs the file in a dot file in resource folder
