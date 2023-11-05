@@ -13,6 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clear Java cache
+        run: |
+          echo "Clearing Java cache"
+          rm -rf $RUNNER_TOOL_CACHE/Java*
+    
       - name: Checkout code
         uses: actions/checkout@v2
 
