@@ -1,33 +1,36 @@
-name: Java CI
+name: CI Build and Test
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up JDK 11
+    - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        java-version: 11
+        java-version: '20'
 
-    - name: Build with Maven
-      run: |
-        mvn clean install
+    - name: Build with Gradle
+      run: ./gradlew build
 
     - name: Run tests
-      run: |
-        mvn test
+      run: ./gradlew test
 
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: junit-results
+        path: '**/build/test-results/test'
 
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: '**/build/libs'
 
