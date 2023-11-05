@@ -8,11 +8,7 @@
 
 name: Java CI with Maven
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push]
 
 jobs:
   build:
@@ -25,11 +21,22 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+        distribution: 'oracle'
 
+        check-latest: true
+
+        server-id: github
+        
+        cache: maven
+
+        mvn-toolchain-vendor: ${distribution}
+
+        
+    - name: Build with Maven
+      run: mvn package
+      id: packaging-jar
+      shell: bash
+    
     
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
