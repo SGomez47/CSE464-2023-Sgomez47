@@ -4,6 +4,8 @@ import guru.nidi.graphviz.engine.*;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static guru.nidi.graphviz.model.Factory.*;
 
@@ -64,6 +66,80 @@ public class Project1 {
         MutableNode node = mutNode(srcLabel);
         graph.add(node.addLink(dstLabel));
     }
+
+
+    public MutableNode getNode(String label) {
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(label)) {
+                return node;
+            }
+        }
+        return null; // Return null if the node with the given label does not exist.
+    }
+
+    public void outputNewGraph(String filepath, MutableGraph newGraph) throws IOException{
+        File output = new File(filepath);
+        BufferedWriter fileOutput = new BufferedWriter(new FileWriter(filepath));
+
+
+        String[] nodes = new String[newGraph.nodes().size()];
+        int i = 0;
+        for(MutableNode outputNode : newGraph.nodes()){
+            nodes[i] = outputNode.name().toString();
+            i++;
+        }
+        Arrays.sort(nodes);
+
+        String numNode = "Number of Nodes: " + newGraph.nodes().size() + "\n";
+        String numEdges = "Number of Edges: " + newGraph.edges().size() + "\n";
+        String outputGraph =  numNode + "Nodes: " + Arrays.toString(nodes) + "\n" + numEdges + "\n" + newGraph.toString();
+
+        fileOutput.write(outputGraph);
+        fileOutput.close();
+    }
+
+    public MutableGraph removeNode(String label) {
+        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
+        graph.nodes().forEach(node -> {
+            if (!node.name().toString().equals(label)) {
+                newGraph.add(node);
+            }
+        });
+
+        return newGraph;
+        // Remove all edges connected to the removed node
+    }
+
+    public MutableGraph removeNodes(String[] labels){
+        Set<String> nodesToDelete = new HashSet<>(Arrays.asList(labels));
+        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
+
+        graph.nodes().forEach(node -> {
+            if (!nodesToDelete.contains(node.name().toString())) {
+                newGraph.add(node);
+            }
+        });
+        return newGraph;
+    }
+
+    public MutableGraph removeEdges(String srcLabel, String dstLabel){
+        Set<String> sourceAndTarget = new HashSet<>();
+        sourceAndTarget.add(srcLabel + dstLabel);
+        sourceAndTarget.add(dstLabel + srcLabel);
+
+        MutableGraph newGraph = Factory.mutGraph().setDirected(true);
+
+        graph.edges().forEach(edge -> {
+            String source = edge.from().name().toString();
+            String target = edge.to().name().toString();
+            if (!(sourceAndTarget.contains(source + target)) && !(sourceAndTarget.contains(target + source))) {
+                newGraph.add(mutNode(source).addLink(target)); // Add the edges you want to keep
+            }
+        });
+
+
+        return newGraph;
+    }
     //------------------------------------------------
     //Feature 4
     //uses the graph and outputs the graph into a dot file
@@ -76,4 +152,6 @@ public class Project1 {
             Graphviz.fromGraph(graph).width(200).render(Format.PNG).toFile(new File(path));
         }
     }
+
+
 }
