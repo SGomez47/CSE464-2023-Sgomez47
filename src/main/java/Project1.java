@@ -96,14 +96,17 @@ public class Project1 {
         fileOutput.close();
     }
 
+    //removes the nodes input by user and deletes any edges with the node
     public void removeNode(String label) {
         MutableGraph newGraph = mutGraph().setDirected(true);
         boolean nodeExist = false;
+        //check if the node exist within the file
         for(MutableNode node: graph.nodes()) {
             if (node.name().toString().equals(label)) {
                 nodeExist = true;
             }
         }
+        //if it does delete the edges first with the node
         if(nodeExist) {
             for(MutableNode tempNode: graph.nodes()){
                 int index = 0;
@@ -114,17 +117,23 @@ public class Project1 {
                     }
                     index++;
                 }
+                //then we loop through the graph and delete the node by creating a new graph
                 if(!tempNode.name().toString().equals(label)){
                     newGraph.add(tempNode);
                 }
             }
+            //add the temp graph to the graph
           graph = newGraph;
         }else{
+            //if it node doesnt exist print an message in terminal and return without doing the test
             System.out.println(label + " does not exist in graph");
             return;
         }
 
     }
+    //removes nodes that are within the array and deletes any corresponding edges
+    //same as removeNode method but we loop through the array doing every node
+    //if one doesnt exist we return
     public void removeNodes(String[] labels) {
         MutableGraph newGraph = mutGraph().setDirected(true);
         for (String label : labels) {
@@ -143,14 +152,18 @@ public class Project1 {
         }
     }
 
+    //remove edges takes in a src and dst node and only deletes that edge we are looking for
     public void removeEdges(String srcLabel, String dstLabel){
         boolean nodeExist = false;
         //sourceAndTarget.add(dstLabel + srcLabel);
+        //check if the src and dst label exist and if the edge exist
         for(Link link: graph.edges()){
             if(link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)){
                 nodeExist = true;
             }
         }
+        //if it does we add the edges of every node into an array
+        //then iterate through each node till we find the link then delete it
         MutableGraph newGraph = mutGraph().setDirected(true);
         if(nodeExist) {
             for(MutableNode tempNode: graph.nodes()) {
@@ -164,21 +177,12 @@ public class Project1 {
                 }
             }
         }else{
+            //if neither the edge nor node exist print out in terminal and stop deleting
             System.out.println("Edge from " + srcLabel + " to " + dstLabel + " does not exist");
             return;
         }
     }
-
-    public void deleteDup(MutableGraph tempGraph) throws IOException{
-        String[] nodes = new String[graph.nodes().size()];
-        int i = 0;
-        for(MutableNode outputNode : graph.nodes()) {
-            nodes[i] = outputNode.name().toString();
-            i++;
-        }
-
-
-    }
+    
     //------------------------------------------------
     //Feature 4
     //uses the graph and outputs the graph into a dot file
