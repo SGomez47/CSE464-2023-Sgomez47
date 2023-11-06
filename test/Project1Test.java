@@ -82,7 +82,7 @@ public class Project1Test {
         test.addNode("Node3");
         test.addEdge("Node1", "Node2");
         test.removeNode("Node2");
-        System.out.print(test.toString());
+        //System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeNode.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeNode.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveNode.txt"));
@@ -123,7 +123,7 @@ public class Project1Test {
         test.parseGraph("src/main/resources/input.dot");
         String[] label = {"e", "a"};
         test.removeNodes(label);
-        System.out.print(test.toString());
+        //System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeNodesError.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeNodesError.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/output.txt"));
@@ -140,7 +140,7 @@ public class Project1Test {
         test.addEdge("Node1", "Node2");
         test.addEdge("Node2", "Node1");
         test.removeEdges("Node1", "Node2");
-        System.out.print(test.toString());
+        //System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeEdge.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeEdge.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveEdge.txt"));
@@ -150,7 +150,7 @@ public class Project1Test {
     public void testRemoveEdgeError() throws IOException {
         test.parseGraph("src/main/resources/input.dot");
         test.removeEdges("a","e");
-        System.out.print(test.toString());
+        //System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeEdgeError.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeEdgeError.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/output.txt"));
