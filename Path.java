@@ -1,12 +1,13 @@
 import guru.nidi.graphviz.model.Link;
 import guru.nidi.graphviz.model.MutableNode;
+import guru.nidi.graphviz.model.*;
+
 
 import java.util.*;
 import java.util.List;
 
 import static guru.nidi.graphviz.model.Factory.mutNode;
 import static guru.nidi.graphviz.model.Factory.node;
-
 
 public class Path {
 
@@ -30,37 +31,35 @@ public class Path {
     }
 
     public Path pathGraphSearch(String src, String dst) {
-            //Create the queue for first in first out
-            Queue<Path> queue = new LinkedList<>();
-            Set<String> lastNodes = new HashSet<>();
-            Path path = new Path();
-            path.addNode(src);
-            queue.offer(path);
+        // Implement DFS search
+        Set<String> lastNode = new HashSet<>();
+        Stack<Path> stack = new Stack<>();
 
-            //while the queue isn't empty we search through the graph nodes to find the fastest path to the
-            //destination node
-            while (!queue.isEmpty()) {
-                Path currentPath = queue.poll();
-                String currentNode = currentPath.getNodes().get(currentPath.getNodes().size() - 1);
+        Path initialPath = new Path();
+        initialPath.addNode(src);
+        stack.push(initialPath);
 
-                if (currentNode.equals(dst)) {
-                    //path was found and output
-                    return currentPath;
-                }
+        while (!stack.isEmpty()) {
+            Path currentPath = stack.pop();
+            String currentNode = currentPath.getNodes().get(currentPath.getNodes().size() - 1);
 
-                if (!lastNodes.contains(currentNode)) {
-                    lastNodes.add(currentNode);
-                    for (Link nextNode : mutNode(currentNode).links()) {
-                        String neighborLabel = nextNode.name().toString();
-                        if (!lastNodes.contains(neighborLabel)) {
-                            Path newPath = new Path();
-                            newPath.getNodes().addAll(currentPath.getNodes());
-                            newPath.addNode(neighborLabel);
-                            queue.offer(newPath);
-                        }
+            if (currentNode.equals(dst)) {
+                return currentPath; // Found a path to the destination
+            }
+
+            if (!lastNode.contains(currentNode)) {
+                lastNode.add(currentNode);
+                for (Link nextNode : mutNode(currentNode).links()) {
+                    String neighborLabel = nextNode.name().toString();
+                    if (!lastNode.contains(neighborLabel)) {
+                        Path newPath = new Path();
+                        newPath.getNodes().addAll(currentPath.getNodes());
+                        newPath.addNode(neighborLabel);
+                        stack.push(newPath);
                     }
                 }
             }
-            return null; // No path found
+        }
+    return null;
     }
 }
