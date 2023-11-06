@@ -13,6 +13,7 @@ import java.util.*;
 
 public class Project1Test {
     private Project1 test;
+    private Path path;
     @Before
     public void setUp(){
         test = new Project1();
@@ -80,14 +81,26 @@ public class Project1Test {
         test.parseGraph("src/main/resources/input.dot");
         test.addNode("Node3");
         test.addEdge("Node1", "Node2");
-        test.removeNode("Node1");
-        //System.out.print(test.toString());
+        test.removeNode("Node2");
+        System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeNode.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeNode.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveNode.txt"));
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    @Test
+    public void testRemoveNodeError() throws IOException {
+        test.parseGraph("src/main/resources/input.dot");
+        test.removeNode("e");
+        //System.out.print(test.toString());
+        test.outputGraph("src/main/resources/removeNodeError.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeNodeError.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/output.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
+    }
+
+//----------------------------------------------------------------------------------------
     //removeNodes, removes a list of nodes as well as the edges corresponding to them
     //compares expected to output
     @Test
@@ -96,7 +109,7 @@ public class Project1Test {
         String[] label = {"Node1", "Node2", "Node3"};
         test.addNodes(label);
         test.addEdge("Node1", "Node2");
-        String[] removeLabels = {"Node1", "Node2"};
+        String[] removeLabels = {"Node2", "Node1"};
         test.removeNodes(removeLabels);
         //System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeNodes.txt");
@@ -105,6 +118,19 @@ public class Project1Test {
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
+    @Test
+    public void testRemoveNodesError() throws IOException {
+        test.parseGraph("src/main/resources/input.dot");
+        String[] label = {"e", "a"};
+        test.removeNodes(label);
+        System.out.print(test.toString());
+        test.outputGraph("src/main/resources/removeNodesError.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeNodesError.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/output.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
+    }
+
+//-------------------------------------------------------------------------------------------
     //removeEdge removes the edge depending on the source and destination node that is input
     //will not remove the nodes only the edge
     //compares expected to output
@@ -114,9 +140,20 @@ public class Project1Test {
         test.addEdge("Node1", "Node2");
         test.addEdge("Node2", "Node1");
         test.removeEdges("Node1", "Node2");
+        System.out.print(test.toString());
         test.outputGraph("src/main/resources/removeEdge.txt");
         String output = Files.readString(Paths.get("src/main/resources/removeEdge.txt"));
         String expected = Files.readString(Paths.get("src/main/resources/expectedRemoveEdge.txt"));
+        Assert.assertEquals(expected.trim(), output.trim());
+    }
+    @Test
+    public void testRemoveEdgeError() throws IOException {
+        test.parseGraph("src/main/resources/input.dot");
+        test.removeEdges("a","e");
+        System.out.print(test.toString());
+        test.outputGraph("src/main/resources/removeEdgeError.txt");
+        String output = Files.readString(Paths.get("src/main/resources/removeEdgeError.txt"));
+        String expected = Files.readString(Paths.get("src/main/resources/output.txt"));
         Assert.assertEquals(expected.trim(), output.trim());
     }
 
@@ -137,4 +174,5 @@ public class Project1Test {
         test.parseGraph("src/main/resources/input.dot");
         test.outputGraphics("src/main/resources/pngGraph.png", "PNG");
     }
+
 }

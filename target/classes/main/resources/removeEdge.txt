@@ -1,12 +1,11 @@
-Number of Nodes: 12
-Nodes: [Node1, Node2, Node3, a, a, a, b, b, c, c, d, d]
-Number of Edges: 6
+Number of Nodes: 6
+Nodes: [Node1, Node2, a, b, c, d]
+Number of Edges: 5
 
 digraph {
 "a" -> "b"
-"a" -> "Node3"
+"b" -> "c"
 "c" -> "d"
 "d" -> "a"
-"b" -> "c"
 "Node2" -> "Node1"
 }

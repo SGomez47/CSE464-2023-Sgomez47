@@ -98,62 +98,74 @@ public class Project1 {
 
     public void removeNode(String label) {
         MutableGraph newGraph = mutGraph().setDirected(true);
-        boolean exist = false;
+        boolean nodeExist = false;
         for(MutableNode node: graph.nodes()) {
             if (node.name().toString().equals(label)) {
-                exist = true;
+                nodeExist = true;
             }
         }
-        if(exist) {
-            graph.nodes().forEach(node -> {
-                if (!node.name().toString().equals(label)) {
-                    newGraph.add(node);
+        if(nodeExist) {
+            for(MutableNode tempNode: graph.nodes()){
+                int index = 0;
+                ArrayList<Link> nodeEdges = new ArrayList<Link>(tempNode.links());
+                for(Link link: nodeEdges){
+                    if(link.from().name().toString().equals(label) || link.to().name().toString().equals(label)){
+                        tempNode.links().remove(tempNode.links().get(index));
+                    }
+                    index++;
                 }
-            });
-            graph = newGraph;
-
-        }else{
-            System.out.print("Node " + label + " does not exist in graph");
-        }
-    }
-    public void removeNodes(String[] labels){
-        Set<String> nodesToDelete = new HashSet<>(Arrays.asList(labels));
-        MutableGraph newGraph = mutGraph().setDirected(true);
-
-        graph.nodes().forEach(node -> {
-            if (!nodesToDelete.contains(node.name().toString())) {
-                newGraph.add(node);
+                if(!tempNode.name().toString().equals(label)){
+                    newGraph.add(tempNode);
+                }
             }
-        });
+          graph = newGraph;
+        }else{
+            System.out.println(label + " does not exist in graph");
+            return;
+        }
 
-
-        graph = newGraph;
+    }
+    public void removeNodes(String[] labels) {
+        MutableGraph newGraph = mutGraph().setDirected(true);
+        for (String label : labels) {
+            boolean nodeExist = false;
+            for (MutableNode node : graph.nodes()) {
+                if (node.name().toString().equals(label)) {
+                    nodeExist = true;
+                }
+            }
+                if (nodeExist) {
+                    removeNode(label);
+                } else {
+                    System.out.println(label + " does not exist in graph");
+                    return;
+                }
+        }
     }
 
     public void removeEdges(String srcLabel, String dstLabel){
-        Set<String> sourceAndTarget = new HashSet<>();
-        sourceAndTarget.add(srcLabel + dstLabel);
-        boolean exist = false;
+        boolean nodeExist = false;
         //sourceAndTarget.add(dstLabel + srcLabel);
         for(Link link: graph.edges()){
             if(link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)){
-                exist = true;
+                nodeExist = true;
             }
         }
         MutableGraph newGraph = mutGraph().setDirected(true);
-        if(exist) {
-            graph.edges().forEach(edge -> {
-                String source = edge.from().name().toString();
-                String target = edge.to().name().toString();
-                //&& !(sourceAndTarget.contains(target + source))
-                if (!(sourceAndTarget.contains(source + target))) {
-                    newGraph.add(mutNode(source).addLink(target)); // Add the edges you want to keep
+        if(nodeExist) {
+            for(MutableNode tempNode: graph.nodes()) {
+                int index = 0;
+                ArrayList<Link> nodeEdges = new ArrayList<Link>(tempNode.links());
+                for (Link link : nodeEdges) {
+                    if (link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)) {
+                        tempNode.links().remove(tempNode.links().get(index));
+                    }
+                    index++;
                 }
-            });
-
-            graph = newGraph;
+            }
         }else{
-            System.out.print("Edge from " + srcLabel + " to " + dstLabel + " does not exist");
+            System.out.println("Edge from " + srcLabel + " to " + dstLabel + " does not exist");
+            return;
         }
     }
 
