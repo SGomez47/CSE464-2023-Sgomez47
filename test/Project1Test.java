@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Project1Test {
     private Project1 test;
-    private Path path;
+
     @Before
     public void setUp(){
         test = new Project1();
