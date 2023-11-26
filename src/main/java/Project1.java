@@ -138,11 +138,11 @@ public class Project1 {
         MutableGraph newGraph = mutGraph().setDirected(true);
         for (String label : labels) {
             boolean nodeExist = false;
-            for (MutableNode node : graph.nodes()) {
-                if (node.name().toString().equals(label)) {
-                    nodeExist = true;
-                }
-            }
+
+            //Refactored Code
+            nodeExist = nodeSearch(label);
+
+
                 if (nodeExist) {
                     removeNode(label);
                 } else {
@@ -150,6 +150,16 @@ public class Project1 {
                     return;
                 }
         }
+    }
+
+    //Refactored Extract Method to search for a node within the graph if it exists then return true
+    public boolean nodeSearch(String label) {
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(label)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //remove edges takes in a src and dst node and only deletes that edge we are looking for
@@ -182,7 +192,7 @@ public class Project1 {
             return;
         }
     }
-    
+
     //------------------------------------------------
     //Feature 4
     //uses the graph and outputs the graph into a dot file
