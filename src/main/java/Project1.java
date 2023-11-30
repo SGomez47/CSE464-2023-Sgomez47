@@ -77,28 +77,7 @@ public class Project1 {
         return null; // Return null if the node with the given label does not exist.
     }
 
-    public void outputNewGraph(String filepath, MutableGraph newGraph) throws IOException{
-        File output = new File(filepath);
-        BufferedWriter fileOutput = new BufferedWriter(new FileWriter(filepath));
-
-
-        String[] nodes = new String[newGraph.nodes().size()];
-        int i = 0;
-        for(MutableNode outputNode : newGraph.nodes()){
-            nodes[i] = outputNode.name().toString();
-            i++;
-        }
-        Arrays.sort(nodes);
-
-        String numNode = "Number of Nodes: " + newGraph.nodes().size() + "\n";
-        String numEdges = "Number of Edges: " + newGraph.edges().size() + "\n";
-        String outputGraph =  numNode + "Nodes: " + Arrays.toString(nodes) + "\n" + numEdges + "\n" + newGraph.toString();
-
-        //String outputGraph = outputString(newGraph, nodes);
-
-        fileOutput.write(outputGraph);
-        fileOutput.close();
-    }
+    //Refactor #5 Removed Method outputNewGraph() since it was an unnecessary method in the code
 
     //removes the nodes input by user and deletes any edges with the node
     public void removeNode(String label) {
