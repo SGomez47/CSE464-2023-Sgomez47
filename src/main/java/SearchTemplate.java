@@ -38,3 +38,4 @@ public abstract class SearchTemplate {
     public abstract Path treeSearch(String src, String dst);
 
 }
+

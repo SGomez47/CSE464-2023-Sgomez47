@@ -1,37 +1,15 @@
-
 import guru.nidi.graphviz.model.Link;
-import guru.nidi.graphviz.model.MutableGraph;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 import static guru.nidi.graphviz.model.Factory.mutNode;
 
-public class BfsSearch extends SearchTemplate {
-    public Queue<String> queue;
-
-    public BfsSearch(MutableGraph path) {
-        super(path);
-        this.queue = new LinkedList<>();
-    }
-
-
-    public String getCurrentNode() {
-        return queue.poll();
-    }
-
-
-    public String getNextNode(List<Link> neighbors) {
-        for (Link neighbor : neighbors) {
-            String neighborLabel = neighbor.name().toString();
-            if (!path.nodes().contains(neighborLabel)) {
-                queue.offer(neighborLabel);
-            }
-        }
-        return queue.peek();
-    }
-
+public class BfsStrategy implements GraphStrategy{
     @Override
-    public Path treeSearch(String src, String dst) {
+    public Path search(String src, String dst) {
 
         Queue<Path> queue = new LinkedList<>();
         Set<String> lastNodes = new HashSet<>();
@@ -62,5 +40,4 @@ public class BfsSearch extends SearchTemplate {
         }
         return null;
     }
-
 }
