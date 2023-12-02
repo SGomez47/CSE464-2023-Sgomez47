@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -174,5 +176,6 @@ public class Project1Test {
         test.parseGraph("src/main/resources/input.dot");
         test.outputGraphics("src/main/resources/pngGraph.png", "PNG");
     }
+
 
 }

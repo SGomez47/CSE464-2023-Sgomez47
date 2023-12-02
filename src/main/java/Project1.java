@@ -198,4 +198,19 @@ public class Project1 {
         }
     }
 
+    public Path graphSearch(String src, String dst, Path.Algorithm algorithm) {
+        SearchTemplate search;
+        if(algorithm == Path.Algorithm.BFS){
+            search = new BfsSearch(graph);
+            return search.treeSearch(src, dst);
+        } else if (algorithm == Path.Algorithm.DFS) {
+            search = new DfsSearch(graph);
+            return search.treeSearch(src,dst);
+        } else if (algorithm == Path.Algorithm.RANDOM_WALK){
+
+        }
+
+        return null;
+    }
+
 }
