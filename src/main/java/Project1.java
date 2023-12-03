@@ -200,6 +200,7 @@ public class Project1 {
 
     public Path graphSearch(String src, String dst, Path.Algorithm algorithm) {
         SearchTemplate search;
+        GraphStrategy searchStrategy;
         if(algorithm == Path.Algorithm.BFS){
             search = new BfsSearch(graph);
             return search.treeSearch(src, dst);
@@ -207,7 +208,8 @@ public class Project1 {
             search = new DfsSearch(graph);
             return search.treeSearch(src,dst);
         } else if (algorithm == Path.Algorithm.RANDOM_WALK){
-
+            searchStrategy = new RandomWalkAlgorithm();
+            return searchStrategy.search(src, dst, graph);
         }
 
         return null;

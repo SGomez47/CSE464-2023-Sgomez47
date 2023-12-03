@@ -177,5 +177,14 @@ public class Project1Test {
         test.outputGraphics("src/main/resources/pngGraph.png", "PNG");
     }
 
+    @Test
+    public void testRandomWalk() throws IOException{
+        test.parseGraph("src/main/resources/input2.dot");
+        Path path;
+        System.out.println("RandomWalk: ");
+        path = test.graphSearch("a","c", Path.Algorithm.RANDOM_WALK);
+        System.out.print(path.toString());
+        assertNotNull(path);
 
+    }
 }

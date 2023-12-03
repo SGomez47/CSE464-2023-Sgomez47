@@ -13,28 +13,6 @@ public abstract class SearchTemplate {
         this.path = path;
     }
 
-    /*public Path search(String src, String dst) {
-        path.addNode(src);
-
-        while (!path.getNodes().isEmpty()) {
-            String currentNode = getCurrentNode();
-            if (currentNode.equals(dst)) {
-                return path;
-            }
-
-            List<Link> neighbors = getNeighbors(currentNode);
-            String nextNode = getNextNode(neighbors);
-            if (nextNode == null) {
-                break;  // No more neighbors, terminate the search
-            }
-
-            path.addNode(nextNode);
-        }
-
-        return null;
-    }*/
-
-
     public abstract Path treeSearch(String src, String dst);
 
 }

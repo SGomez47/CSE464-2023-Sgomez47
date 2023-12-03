@@ -1,4 +1,5 @@
 import guru.nidi.graphviz.model.Link;
+import guru.nidi.graphviz.model.MutableGraph;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,7 +10,7 @@ import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class BfsStrategy implements GraphStrategy{
     @Override
-    public Path search(String src, String dst) {
+    public Path search(String src, String dst, MutableGraph graph) {
 
         Queue<Path> queue = new LinkedList<>();
         Set<String> lastNodes = new HashSet<>();
