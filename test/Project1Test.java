@@ -177,6 +177,7 @@ public class Project1Test {
         test.outputGraphics("src/main/resources/pngGraph.png", "PNG");
     }
 
+    //Prints out the random walk in the terminal
     @Test
     public void testRandomWalk() throws IOException{
         test.parseGraph("src/main/resources/input2.dot");
