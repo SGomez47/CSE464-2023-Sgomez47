@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -175,4 +177,15 @@ public class Project1Test {
         test.outputGraphics("src/main/resources/pngGraph.png", "PNG");
     }
 
+    //Prints out the random walk in the terminal
+    @Test
+    public void testRandomWalk() throws IOException{
+        test.parseGraph("src/main/resources/input2.dot");
+        Path path;
+        System.out.println("RandomWalk: ");
+        path = test.graphSearch("a","c", Path.Algorithm.RANDOM_WALK);
+        System.out.print(path.toString());
+        assertNotNull(path);
+
+    }
 }

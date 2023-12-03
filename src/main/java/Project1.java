@@ -10,6 +10,9 @@ import static guru.nidi.graphviz.model.Factory.*;
 public class Project1 {
     private MutableGraph graph;
 
+    //Refactor #4 Extract Variable
+    boolean nodeExist = false;
+
     //---------------------------------------------
     //Feature 1
     //parseGraph parses the input dot into a graph
@@ -65,7 +68,6 @@ public class Project1 {
         graph.add(node.addLink(dstLabel));
     }
 
-
     public MutableNode getNode(String label) {
         for (MutableNode node : graph.nodes()) {
             if (node.name().toString().equals(label)) {
@@ -75,37 +77,16 @@ public class Project1 {
         return null; // Return null if the node with the given label does not exist.
     }
 
-    public void outputNewGraph(String filepath, MutableGraph newGraph) throws IOException{
-        File output = new File(filepath);
-        BufferedWriter fileOutput = new BufferedWriter(new FileWriter(filepath));
-
-
-        String[] nodes = new String[newGraph.nodes().size()];
-        int i = 0;
-        for(MutableNode outputNode : newGraph.nodes()){
-            nodes[i] = outputNode.name().toString();
-            i++;
-        }
-        Arrays.sort(nodes);
-
-        String numNode = "Number of Nodes: " + newGraph.nodes().size() + "\n";
-        String numEdges = "Number of Edges: " + newGraph.edges().size() + "\n";
-        String outputGraph =  numNode + "Nodes: " + Arrays.toString(nodes) + "\n" + numEdges + "\n" + newGraph.toString();
-
-        fileOutput.write(outputGraph);
-        fileOutput.close();
-    }
+    //Refactor #5 Removed Method outputNewGraph() since it was an unnecessary method in the code
 
     //removes the nodes input by user and deletes any edges with the node
     public void removeNode(String label) {
         MutableGraph newGraph = mutGraph().setDirected(true);
-        boolean nodeExist = false;
         //check if the node exist within the file
-        for(MutableNode node: graph.nodes()) {
-            if (node.name().toString().equals(label)) {
-                nodeExist = true;
-            }
-        }
+
+        //Refactor Method #1 Extract method change
+        nodeExist = nodeSearch(label);
+
         //if it does delete the edges first with the node
         if(nodeExist) {
             for(MutableNode tempNode: graph.nodes()){
@@ -137,31 +118,28 @@ public class Project1 {
     public void removeNodes(String[] labels) {
         MutableGraph newGraph = mutGraph().setDirected(true);
         for (String label : labels) {
-            boolean nodeExist = false;
-            for (MutableNode node : graph.nodes()) {
-                if (node.name().toString().equals(label)) {
-                    nodeExist = true;
-                }
+
+            //Refactored Code #2
+            nodeExist = nodeSearch(label);
+
+            if (nodeExist) {
+                removeNode(label);
+            } else {
+                System.out.println(label + " does not exist in graph");
+                return;
             }
-                if (nodeExist) {
-                    removeNode(label);
-                } else {
-                    System.out.println(label + " does not exist in graph");
-                    return;
-                }
         }
     }
 
+
     //remove edges takes in a src and dst node and only deletes that edge we are looking for
     public void removeEdges(String srcLabel, String dstLabel){
-        boolean nodeExist = false;
         //sourceAndTarget.add(dstLabel + srcLabel);
         //check if the src and dst label exist and if the edge exist
-        for(Link link: graph.edges()){
-            if(link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)){
-                nodeExist = true;
-            }
-        }
+
+        //Refactor #3 Extract Method to search if an edge exist
+        nodeExist = edgeSearch(srcLabel, dstLabel);
+
         //if it does we add the edges of every node into an array
         //then iterate through each node till we find the link then delete it
         MutableGraph newGraph = mutGraph().setDirected(true);
@@ -182,7 +160,31 @@ public class Project1 {
             return;
         }
     }
-    
+
+
+    //-------------------------------------------------------------------
+    //Refactor Methods
+    //Refactor #1 & 2 Extract Method to search for a node within the graph if it exists then return true
+    public boolean nodeSearch(String label) {
+        for (MutableNode node : graph.nodes()) {
+            if (node.name().toString().equals(label)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Refactor #3 Extract Method to search if an edge exist
+    public boolean edgeSearch(String srcLabel, String dstLabel){
+
+        for(Link link: graph.edges()){
+            if(link.from().name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //------------------------------------------------
     //Feature 4
     //uses the graph and outputs the graph into a dot file
@@ -194,6 +196,23 @@ public class Project1 {
         if(format.equals("PNG")) {
             Graphviz.fromGraph(graph).width(200).render(Format.PNG).toFile(new File(path));
         }
+    }
+
+    public Path graphSearch(String src, String dst, Path.Algorithm algorithm) {
+        SearchTemplate search;
+        GraphStrategy searchStrategy;
+        if(algorithm == Path.Algorithm.BFS){
+            search = new BfsSearch(graph);
+            return search.treeSearch(src, dst);
+        } else if (algorithm == Path.Algorithm.DFS) {
+            search = new DfsSearch(graph);
+            return search.treeSearch(src,dst);
+        } else if (algorithm == Path.Algorithm.RANDOM_WALK){
+            searchStrategy = new RandomWalkAlgorithm();
+            return searchStrategy.search(src, dst, graph);
+        }
+
+        return null;
     }
 
 }
